@@ -163,10 +163,13 @@ class MainActivity : Activity() {
         presetList.removeAllViews()
         PromptLibrary.presets(this, store).forEachIndexed { index, comment ->
             presetList.addView(
-                commentRow(comment) { checked ->
-                    store.setPresetEnabled(index, checked)
-                    onCommentsChanged()
-                },
+                commentRow(
+                    option = comment,
+                    onEnabledChanged = { checked ->
+                        store.setPresetEnabled(index, checked)
+                        onCommentsChanged()
+                    }
+                ),
                 rowLayoutParams()
             )
         }
