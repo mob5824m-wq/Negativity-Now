@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Negativity Now</string>
+    <string name="channel_name">Blunt reminders</string>
+    <string name="channel_description">Scheduled sharp reminders from Negativity Now.</string>
+    <string name="notification_title">Negativity Now</string>
+    <string-array name="interval_minutes">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+        <item>90 minutes</item>
+        <item>120 minutes</item>
+        <item>180 minutes</item>
+    </string-array>
+</resources>

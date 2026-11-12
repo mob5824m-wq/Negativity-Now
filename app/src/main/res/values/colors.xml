@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ink">#0A0C10</color>
+    <color name="surface">#151A21</color>
+    <color name="surface_elevated">#1C232D</color>
+    <color name="surface_deep">#0E1218</color>
+    <color name="line">#303946</color>
+    <color name="paper">#F5F0E8</color>
+    <color name="muted">#A9B0BA</color>
+    <color name="acid">#D8FF52</color>
+    <color name="acid_dark">#B7DD32</color>
+    <color name="warning">#FF9B7A</color>
+</resources>
