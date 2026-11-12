@@ -43,9 +43,10 @@ jobs:
       - name: Install Android build tools
         run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
       - name: Build installable debug APK
-        run: ./gradlew --no-daemon :app:assembleDebug
+        run: "./gradlew --no-daemon :app:assembleDebug"
       - name: Verify debug APK signature
-        run: "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
+        run: |
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
       - name: Name release APK
         run: cp app/build/outputs/apk/debug/app-debug.apk "negativity-now-${RELEASE_TAG}.apk"
       - name: Publish GitHub release
