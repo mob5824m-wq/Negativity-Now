@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Negativity Now</string>
     <string name="channel_name">Recordatorios directos</string>
     <string name="channel_description">Recordatorios directos programados de Negativity Now.</string>
     <string name="notification_title">Negativity Now</string>
-
     <string name="brand">NEGATIVITY NOW</string>
     <string name="logo_content_description">Logotipo sereno de burbuja de diálogo de Negativity Now</string>
     <string name="headline">NO MÁS\nDESPUÉS.</string>
@@ -34,7 +33,6 @@
     <string name="notification_settings_hint">Controla el sonido, la vibración y la importancia en los ajustes de Android.</string>
     <string name="open_alert_settings">ABRIR AJUSTES DE ALERTAS</string>
     <string name="footer">Un empujón, no una herida. Si deja de ayudar, ponlo en pausa.</string>
-
     <string name="enabled">Activo</string>
     <string name="edit">EDITAR</string>
     <string name="delete">ELIMINAR</string>
@@ -64,26 +62,21 @@
     <string name="delete_comment_message">Este comentario personalizado se eliminará de la rotación.</string>
     <string name="cancel">CANCELAR</string>
     <string name="comment_deleted">Comentario eliminado.</string>
-
-    <string-array name="interval_labels">
-        <item>15 minutos</item>
-        <item>30 minutos</item>
-        <item>45 minutos</item>
-        <item>60 minutos</item>
-        <item>90 minutos</item>
-        <item>120 minutos</item>
-        <item>180 minutos</item>
-    </string-array>
-    <string-array name="preset_comment_messages">
-        <item>Dijiste que empezarías. El reloj no está de acuerdo.</item>
-        <item>El potencial es barato. Cumplir no lo es.</item>
-        <item>La tarea sigue ahí. Evitarla solo la hizo más vieja.</item>
-        <item>Deja de tratar el esfuerzo como un rasgo de personalidad. Haz lo siguiente.</item>
-        <item>Tus planes futuros no están en el calendario de hoy. Tú sí.</item>
-        <item>Nadie va a terminar el trabajo que sigues posponiendo.</item>
-        <item>Sé menos impresionante en teoría y más útil en la práctica.</item>
-        <item>No necesitas mejor ánimo. Necesitas un primer paso más pequeño.</item>
-        <item>La versión de ti con impulso empezó antes de sentirse lista.</item>
-        <item>Si importa, dale diez minutos honestos en lugar de otra excusa.</item>
-    </string-array>
+    <string name="interval_label_15">15 minutos</string>
+    <string name="interval_label_30">30 minutos</string>
+    <string name="interval_label_45">45 minutos</string>
+    <string name="interval_label_60">60 minutos</string>
+    <string name="interval_label_90">90 minutos</string>
+    <string name="interval_label_120">120 minutos</string>
+    <string name="interval_label_180">180 minutos</string>
+    <string name="preset_comment_01">Dijiste que empezarías. El reloj no está de acuerdo.</string>
+    <string name="preset_comment_02">El potencial es barato. Cumplir no lo es.</string>
+    <string name="preset_comment_03">La tarea sigue ahí. Evitarla solo la hizo más vieja.</string>
+    <string name="preset_comment_04">Deja de tratar el esfuerzo como un rasgo de personalidad. Haz lo siguiente.</string>
+    <string name="preset_comment_05">Tus planes futuros no están en el calendario de hoy. Tú sí.</string>
+    <string name="preset_comment_06">Nadie va a terminar el trabajo que sigues posponiendo.</string>
+    <string name="preset_comment_07">Sé menos impresionante en teoría y más útil en la práctica.</string>
+    <string name="preset_comment_08">No necesitas mejor ánimo. Necesitas un primer paso más pequeño.</string>
+    <string name="preset_comment_09">La versión de ti con impulso empezó antes de sentirse lista.</string>
+    <string name="preset_comment_10">Si importa, dale diez minutos honestos en lugar de otra excusa.</string>
 </resources>

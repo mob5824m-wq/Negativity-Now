@@ -4,9 +4,27 @@ import android.content.Context
 
 /** Localized, user-selectable prompts for scheduled reminders and the in-app verdict. */
 object PromptLibrary {
+    private val PRESET_COMMENT_RESOURCES = intArrayOf(
+        R.string.preset_comment_01,
+        R.string.preset_comment_02,
+        R.string.preset_comment_03,
+        R.string.preset_comment_04,
+        R.string.preset_comment_05,
+        R.string.preset_comment_06,
+        R.string.preset_comment_07,
+        R.string.preset_comment_08,
+        R.string.preset_comment_09,
+        R.string.preset_comment_10
+    )
+
     fun presets(context: Context, store: PreferencesStore): List<CommentOption> =
-        context.resources.getStringArray(R.array.preset_comment_messages).mapIndexed { index, text ->
-            CommentOption(id = "preset_$index", text = text, enabled = store.isPresetEnabled(index), isCustom = false)
+        PRESET_COMMENT_RESOURCES.mapIndexed { index, resourceId ->
+            CommentOption(
+                id = "preset_$index",
+                text = context.getString(resourceId),
+                enabled = store.isPresetEnabled(index),
+                isCustom = false
+            )
         }
 
     fun customComments(store: PreferencesStore): List<CommentOption> =

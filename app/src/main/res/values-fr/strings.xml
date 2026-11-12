@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Negativity Now</string>
     <string name="channel_name">Rappels directs</string>
     <string name="channel_description">Rappels directs programmés de Negativity Now.</string>
     <string name="notification_title">Negativity Now</string>
-
     <string name="brand">NEGATIVITY NOW</string>
     <string name="logo_content_description">Logo apaisé en forme de bulle de discussion de Negativity Now</string>
     <string name="headline">FINI LES\nPLUS TARD.</string>
@@ -34,7 +33,6 @@
     <string name="notification_settings_hint">Gérez le son, la vibration et l’importance des notifications dans les réglages Android.</string>
     <string name="open_alert_settings">OUVRIR LES RÉGLAGES DES ALERTES</string>
     <string name="footer">Un coup de pouce, pas une blessure. Si cela ne vous aide plus, mettez-le en pause.</string>
-
     <string name="enabled">Activé</string>
     <string name="edit">MODIFIER</string>
     <string name="delete">SUPPRIMER</string>
@@ -64,26 +62,21 @@
     <string name="delete_comment_message">Ce commentaire personnalisé sera retiré de la rotation.</string>
     <string name="cancel">ANNULER</string>
     <string name="comment_deleted">Commentaire supprimé.</string>
-
-    <string-array name="interval_labels">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>45 minutes</item>
-        <item>60 minutes</item>
-        <item>90 minutes</item>
-        <item>120 minutes</item>
-        <item>180 minutes</item>
-    </string-array>
-    <string-array name="preset_comment_messages">
-        <item>Vous aviez dit que vous commenceriez. L’horloge n’est pas d’accord.</item>
-        <item>Le potentiel ne coûte rien. Aller au bout coûte davantage.</item>
-        <item>La tâche est toujours là. L’éviter l’a seulement fait vieillir.</item>
-        <item>Arrêtez de traiter l’effort comme un trait de caractère. Faites la prochaine chose.</item>
-        <item>Vos projets futurs ne figurent pas sur le calendrier d’aujourd’hui. Vous, si.</item>
-        <item>Personne ne viendra terminer le travail que vous continuez de repousser.</item>
-        <item>Soyez moins impressionnant en théorie et plus utile dans la pratique.</item>
-        <item>Vous n’avez pas besoin d’une meilleure humeur. Vous avez besoin d’un premier pas plus petit.</item>
-        <item>La version de vous avec de l’élan a commencé avant de se sentir prête.</item>
-        <item>Si cela compte, donnez-y dix minutes honnêtes au lieu d’une nouvelle excuse.</item>
-    </string-array>
+    <string name="interval_label_15">15 minutes</string>
+    <string name="interval_label_30">30 minutes</string>
+    <string name="interval_label_45">45 minutes</string>
+    <string name="interval_label_60">60 minutes</string>
+    <string name="interval_label_90">90 minutes</string>
+    <string name="interval_label_120">120 minutes</string>
+    <string name="interval_label_180">180 minutes</string>
+    <string name="preset_comment_01">Vous aviez dit que vous commenceriez. L’horloge n’est pas d’accord.</string>
+    <string name="preset_comment_02">Le potentiel ne coûte rien. Aller au bout coûte davantage.</string>
+    <string name="preset_comment_03">La tâche est toujours là. L’éviter l’a seulement fait vieillir.</string>
+    <string name="preset_comment_04">Arrêtez de traiter l’effort comme un trait de caractère. Faites la prochaine chose.</string>
+    <string name="preset_comment_05">Vos projets futurs ne figurent pas sur le calendrier d’aujourd’hui. Vous, si.</string>
+    <string name="preset_comment_06">Personne ne viendra terminer le travail que vous continuez de repousser.</string>
+    <string name="preset_comment_07">Soyez moins impressionnant en théorie et plus utile dans la pratique.</string>
+    <string name="preset_comment_08">Vous n’avez pas besoin d’une meilleure humeur. Vous avez besoin d’un premier pas plus petit.</string>
+    <string name="preset_comment_09">La version de vous avec de l’élan a commencé avant de se sentir prête.</string>
+    <string name="preset_comment_10">Si cela compte, donnez-y dix minutes honnêtes au lieu d’une nouvelle excuse.</string>
 </resources>

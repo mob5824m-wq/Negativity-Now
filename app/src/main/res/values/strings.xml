@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name">Negativity Now</string>
     <string name="channel_name">Blunt reminders</string>
     <string name="channel_description">Scheduled sharp reminders from Negativity Now.</string>
     <string name="notification_title">Negativity Now</string>
-
     <string name="brand">NEGATIVITY NOW</string>
     <string name="logo_content_description">Negativity Now calm speech-bubble logo</string>
     <string name="headline">NO MORE\nLATER.</string>
@@ -34,7 +33,6 @@
     <string name="notification_settings_hint">Control notification sound, vibration, and importance in Android settings.</string>
     <string name="open_alert_settings">OPEN ALERT SETTINGS</string>
     <string name="footer">A nudge, not a wound. If it stops helping, pause it.</string>
-
     <string name="enabled">Enabled</string>
     <string name="edit">EDIT</string>
     <string name="delete">DELETE</string>
@@ -64,26 +62,21 @@
     <string name="delete_comment_message">This custom comment will be removed from the rotation.</string>
     <string name="cancel">CANCEL</string>
     <string name="comment_deleted">Comment deleted.</string>
-
-    <string-array name="interval_labels">
-        <item>15 minutes</item>
-        <item>30 minutes</item>
-        <item>45 minutes</item>
-        <item>60 minutes</item>
-        <item>90 minutes</item>
-        <item>120 minutes</item>
-        <item>180 minutes</item>
-    </string-array>
-    <string-array name="preset_comment_messages">
-        <item>You said you would begin. The clock disagrees.</item>
-        <item>Potential is cheap. Follow-through is not.</item>
-        <item>The task is still there. Avoiding it only made it older.</item>
-        <item>Stop treating effort like a personality trait. Do the next thing.</item>
-        <item>Your future plans are not on today&apos;s calendar. You are.</item>
-        <item>Nobody is coming to finish the work you keep postponing.</item>
-        <item>Be less impressive in theory and more useful in practice.</item>
-        <item>You do not need a better mood. You need a smaller first step.</item>
-        <item>The version of you with momentum started before feeling ready.</item>
-        <item>If it matters, give it ten honest minutes instead of another excuse.</item>
-    </string-array>
+    <string name="interval_label_15">15 minutes</string>
+    <string name="interval_label_30">30 minutes</string>
+    <string name="interval_label_45">45 minutes</string>
+    <string name="interval_label_60">60 minutes</string>
+    <string name="interval_label_90">90 minutes</string>
+    <string name="interval_label_120">120 minutes</string>
+    <string name="interval_label_180">180 minutes</string>
+    <string name="preset_comment_01">You said you would begin. The clock disagrees.</string>
+    <string name="preset_comment_02">Potential is cheap. Follow-through is not.</string>
+    <string name="preset_comment_03">The task is still there. Avoiding it only made it older.</string>
+    <string name="preset_comment_04">Stop treating effort like a personality trait. Do the next thing.</string>
+    <string name="preset_comment_05">Your future plans are not on today's calendar. You are.</string>
+    <string name="preset_comment_06">Nobody is coming to finish the work you keep postponing.</string>
+    <string name="preset_comment_07">Be less impressive in theory and more useful in practice.</string>
+    <string name="preset_comment_08">You do not need a better mood. You need a smaller first step.</string>
+    <string name="preset_comment_09">The version of you with momentum started before feeling ready.</string>
+    <string name="preset_comment_10">If it matters, give it ten honest minutes instead of another excuse.</string>
 </resources>

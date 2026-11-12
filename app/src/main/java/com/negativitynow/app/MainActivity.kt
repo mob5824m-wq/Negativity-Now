@@ -79,7 +79,7 @@ class MainActivity : Activity() {
         customCommentsList = findViewById(R.id.customCommentsList)
         customEmptyText = findViewById(R.id.customEmptyText)
 
-        val intervalLabels = resources.getStringArray(R.array.interval_labels)
+        val intervalLabels = INTERVAL_LABEL_RESOURCES.map(::getString)
         intervalSpinner.adapter = ArrayAdapter(
             this,
             R.layout.spinner_selected,
@@ -406,5 +406,14 @@ class MainActivity : Activity() {
         private const val REQUEST_NOTIFICATIONS = 1001
         private const val MAX_COMMENT_LENGTH = 220
         private val INTERVAL_OPTIONS = intArrayOf(15, 30, 45, 60, 90, 120, 180)
+        private val INTERVAL_LABEL_RESOURCES = intArrayOf(
+            R.string.interval_label_15,
+            R.string.interval_label_30,
+            R.string.interval_label_45,
+            R.string.interval_label_60,
+            R.string.interval_label_90,
+            R.string.interval_label_120,
+            R.string.interval_label_180
+        )
     }
 }
