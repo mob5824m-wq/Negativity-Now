@@ -1,4 +1,4 @@
-name: Release Android app
+name: Release Android APK
 
 on:
   push:
@@ -25,15 +25,11 @@ jobs:
         run: python3 scripts/quality_checks.py
 
   release:
-    name: Build and publish release
+    name: Build and publish APK
     needs: quality
     runs-on: ubuntu-latest
     env:
       RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
-      ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
-      ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-      ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -46,29 +42,18 @@ jobs:
         uses: android-actions/setup-android@v3
       - name: Install Android build tools
         run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
-      - name: Validate release signing secrets
-        shell: bash
-        run: |
-          for secret in ANDROID_KEYSTORE_BASE64 ANDROID_KEY_ALIAS ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_PASSWORD; do
-            if [ -z "${!secret}" ]; then
-              echo "Missing required GitHub Actions secret: ${secret}" >&2
-              exit 1
-            fi
-          done
-      - name: Decode release keystore
-        run: |
-          echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
-          echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
-      - name: Build signed Android App Bundle
-        run: ./gradlew --no-daemon :app:bundleRelease
-      - name: Verify signed bundle
-        run: jarsigner -verify -certs app/build/outputs/bundle/release/app-release.aab
+      - name: Build installable debug APK
+        run: ./gradlew --no-daemon :app:assembleDebug
+      - name: Verify debug APK signature
+        run: "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
+      - name: Name release APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk "negativity-now-${RELEASE_TAG}.apk"
       - name: Publish GitHub release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$RELEASE_TAG" \
-            app/build/outputs/bundle/release/app-release.aab \
+            "negativity-now-${RELEASE_TAG}.apk" \
             --target "$GITHUB_SHA" \
             --title "Negativity Now $RELEASE_TAG" \
             --generate-notes

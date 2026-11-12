@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Negativity Now</string>
+    <string name="channel_name">Rappels directs</string>
+    <string name="channel_description">Rappels directs programmés de Negativity Now.</string>
+    <string name="notification_title">Negativity Now</string>
+
+    <string name="brand">NEGATIVITY NOW</string>
+    <string name="logo_content_description">Logo apaisé en forme de bulle de discussion de Negativity Now</string>
+    <string name="headline">FINI LES\nPLUS TARD.</string>
+    <string name="intro">Définissez la plage. Choisissez le rythme. Recevez un rappel direct au bon moment.</string>
+    <string name="armed">ACTIF</string>
+    <string name="paused">EN PAUSE</string>
+    <string name="next_hit">PROCHAIN RAPPEL</string>
+    <string name="pause_reminders">METTRE LES RAPPELS EN PAUSE</string>
+    <string name="arm_reminders">ACTIVER LES RAPPELS</string>
+    <string name="your_window">VOTRE PLAGE</string>
+    <string name="start">DÉBUT</string>
+    <string name="end">FIN</string>
+    <string name="choose_start_time">Choisir l’heure de début</string>
+    <string name="choose_end_time">Choisir l’heure de fin</string>
+    <string name="remind_me_every">ME RAPPELER TOUTES LES</string>
+    <string name="choose_notification_interval">Choisir l’intervalle de notification</string>
+    <string name="window_schedule_hint">Une heure de début et de fin identique signifie toute la journée. Android peut regrouper brièvement les alertes pour préserver la batterie.</string>
+    <string name="opening_verdict">VERDICT À L’OUVERTURE</string>
+    <string name="send_test">ENVOYER UN TEST</string>
+    <string name="preset_comments">COMMENTAIRES PRÉDÉFINIS</string>
+    <string name="preset_comments_hint">Activez ou désactivez chaque commentaire. Les rappels tournent entre les commentaires actifs.</string>
+    <string name="custom_comments">VOS COMMENTAIRES</string>
+    <string name="custom_comments_hint">Ajoutez votre propre phrase à la rotation.</string>
+    <string name="no_custom_comments">Aucun commentaire personnalisé pour le moment.</string>
+    <string name="add_comment">AJOUTER UN COMMENTAIRE</string>
+    <string name="notification_settings">RÉGLAGES DES ALERTES</string>
+    <string name="notification_settings_hint">Gérez le son, la vibration et l’importance des notifications dans les réglages Android.</string>
+    <string name="open_alert_settings">OUVRIR LES RÉGLAGES DES ALERTES</string>
+    <string name="footer">Un coup de pouce, pas une blessure. Si cela ne vous aide plus, mettez-le en pause.</string>
+
+    <string name="enabled">Activé</string>
+    <string name="edit">MODIFIER</string>
+    <string name="delete">SUPPRIMER</string>
+    <string name="comment_enabled_description">Activer le commentaire : %1$s</string>
+    <string name="reminders_armed">Rappels activés.</string>
+    <string name="reminders_paused">Rappels en pause.</string>
+    <string name="calculating_next_reminder">Calcul du prochain rappel…</string>
+    <string name="nothing_scheduled">Rien n’est programmé.</string>
+    <string name="next_hit_format">%1$s · toutes les %2$s</string>
+    <string name="today_at">Aujourd’hui à %1$s</string>
+    <string name="tomorrow_at">Demain à %1$s</string>
+    <string name="interval_hour">heure</string>
+    <string name="interval_minutes">%1$d min</string>
+    <string name="no_enabled_comments">Activez au moins un commentaire pour envoyer un rappel.</string>
+    <string name="notifications_off">Les notifications sont désactivées. Vous pouvez les activer dans les réglages Android.</string>
+    <string name="notifications_disabled_settings">Les notifications sont désactivées dans les réglages Android.</string>
+    <string name="test_reminder_title">Rappel de test</string>
+    <string name="test_sent">Test envoyé.</string>
+    <string name="add_custom_comment">Ajouter un commentaire personnalisé</string>
+    <string name="edit_custom_comment">Modifier le commentaire personnalisé</string>
+    <string name="comment_input_hint">Écrivez un rappel bref et direct</string>
+    <string name="save">ENREGISTRER</string>
+    <string name="update">METTRE À JOUR</string>
+    <string name="comment_empty">Un commentaire ne peut pas être vide.</string>
+    <string name="comment_too_long">Les commentaires doivent comporter au plus %1$d caractères.</string>
+    <string name="delete_comment_title">Supprimer le commentaire ?</string>
+    <string name="delete_comment_message">Ce commentaire personnalisé sera retiré de la rotation.</string>
+    <string name="cancel">ANNULER</string>
+    <string name="comment_deleted">Commentaire supprimé.</string>
+
+    <string-array name="interval_labels">
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>45 minutes</item>
+        <item>60 minutes</item>
+        <item>90 minutes</item>
+        <item>120 minutes</item>
+        <item>180 minutes</item>
+    </string-array>
+    <string-array name="preset_comment_messages">
+        <item>Vous aviez dit que vous commenceriez. L’horloge n’est pas d’accord.</item>
+        <item>Le potentiel ne coûte rien. Aller au bout coûte davantage.</item>
+        <item>La tâche est toujours là. L’éviter l’a seulement fait vieillir.</item>
+        <item>Arrêtez de traiter l’effort comme un trait de caractère. Faites la prochaine chose.</item>
+        <item>Vos projets futurs ne figurent pas sur le calendrier d’aujourd’hui. Vous, si.</item>
+        <item>Personne ne viendra terminer le travail que vous continuez de repousser.</item>
+        <item>Soyez moins impressionnant en théorie et plus utile dans la pratique.</item>
+        <item>Vous n’avez pas besoin d’une meilleure humeur. Vous avez besoin d’un premier pas plus petit.</item>
+        <item>La version de vous avec de l’élan a commencé avant de se sentir prête.</item>
+        <item>Si cela compte, donnez-y dix minutes honnêtes au lieu d’une nouvelle excuse.</item>
+    </string-array>
+</resources>
