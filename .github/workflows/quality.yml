@@ -48,8 +48,8 @@ jobs:
           status=${PIPESTATUS[0]}
           set -e
           if [ "$status" -ne 0 ]; then
-            summary=$(tail -n 25 gradle-build.log | tr '\n' ' ' | sed 's/%/%25/g')
-            echo "::error title=APK build failed::$summary"
+            diagnostics=$(grep -inE 'what went wrong|^> |error|exception|resource|failed' gradle-build.log | head -n 35 | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=APK build failed::$diagnostics"
             exit "$status"
           fi
       - name: Upload Gradle build log on failure
