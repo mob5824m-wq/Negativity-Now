@@ -42,8 +42,16 @@ jobs:
       - name: Build debug APK
         shell: bash
         run: |
+          set +e
           set -o pipefail
           ./gradlew --no-daemon :app:assembleDebug --stacktrace 2>&1 | tee gradle-build.log
+          status=${PIPESTATUS[0]}
+          set -e
+          if [ "$status" -ne 0 ]; then
+            summary=$(tail -n 25 gradle-build.log | tr '\n' ' ' | sed 's/%/%25/g')
+            echo "::error title=APK build failed::$summary"
+            exit "$status"
+          fi
       - name: Upload Gradle build log on failure
         if: failure()
         uses: actions/upload-artifact@v4
