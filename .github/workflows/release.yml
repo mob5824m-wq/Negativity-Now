@@ -46,7 +46,17 @@ jobs:
           yes | "$SDKMANAGER" --licenses || true
           "$SDKMANAGER" 'platforms;android-35' 'build-tools;35.0.0'
       - name: Build installable debug APK
-        run: "./gradlew --no-daemon :app:assembleDebug"
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon :app:assembleDebug --stacktrace 2>&1 | tee gradle-build.log
+      - name: Upload Gradle build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: negativity-now-gradle-build-log
+          path: gradle-build.log
+          if-no-files-found: ignore
       - name: Verify debug APK signature
         run: |
           "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
