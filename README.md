@@ -22,6 +22,21 @@ Matching start and end times means **all day**. Alerts use Android's idle-friend
 
 The project deliberately uses platform Android APIs rather than a notification/work scheduling library. This keeps the schedule readable and ensures the app can put the next one-shot notification back on the queue after every delivery.
 
+## Quality and releases
+
+`python3 scripts/quality_checks.py` enforces the product rule: **the app does not send a notification specifically when the user opens or foregrounds it.** It verifies that lifecycle methods do not post a reminder and that a notification-permission response can only complete an explicit test-notification request.
+
+The GitHub **Quality checks** workflow runs this guard on pull requests and pushes. The **Release Android app** workflow runs it again, builds a signed AAB, verifies the signature, and publishes a GitHub release whenever a `v*` tag is pushed (or when manually run with a release tag).
+
+Before releasing, add these repository Actions secrets:
+
+- `ANDROID_KEYSTORE_BASE64` — base64-encoded release keystore
+- `ANDROID_KEY_ALIAS` — signing-key alias
+- `ANDROID_KEYSTORE_PASSWORD` — keystore password
+- `ANDROID_KEY_PASSWORD` — signing-key password
+
+The release workflow passes the decoded keystore to Gradle through ephemeral environment variables; no signing material is stored in the repository.
+
 ## Project layout
 
 - `MainActivity.kt` — settings UI, in-app opening verdict, comment controls, and notification-channel settings link.

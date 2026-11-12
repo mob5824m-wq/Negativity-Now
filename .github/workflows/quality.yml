@@ -1,0 +1,21 @@
+name: Quality checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'arena/**'
+
+permissions:
+  contents: read
+
+jobs:
+  product-rules:
+    name: Product rules
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Verify product quality rules
+        run: python3 scripts/quality_checks.py
