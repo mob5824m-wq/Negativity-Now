@@ -4,7 +4,67 @@
     <string name="channel_name">Blunt reminders</string>
     <string name="channel_description">Scheduled sharp reminders from Negativity Now.</string>
     <string name="notification_title">Negativity Now</string>
-    <string-array name="interval_minutes">
+
+    <string name="brand">NEGATIVITY NOW</string>
+    <string name="headline">NO MORE\nLATER.</string>
+    <string name="intro">Set the window. Pick the pace. Get a blunt reminder when it matters.</string>
+    <string name="armed">ARMED</string>
+    <string name="paused">PAUSED</string>
+    <string name="next_hit">NEXT HIT</string>
+    <string name="pause_reminders">PAUSE REMINDERS</string>
+    <string name="arm_reminders">ARM REMINDERS</string>
+    <string name="your_window">YOUR WINDOW</string>
+    <string name="start">START</string>
+    <string name="end">END</string>
+    <string name="choose_start_time">Choose start time</string>
+    <string name="choose_end_time">Choose end time</string>
+    <string name="remind_me_every">REMIND ME EVERY</string>
+    <string name="choose_notification_interval">Choose notification interval</string>
+    <string name="window_schedule_hint">Matching start and end times means all day. Android may batch alerts briefly to protect battery.</string>
+    <string name="opening_verdict">OPENING VERDICT</string>
+    <string name="send_test">SEND A TEST</string>
+    <string name="preset_comments">PRESET COMMENTS</string>
+    <string name="preset_comments_hint">Turn individual comments on or off. Scheduled reminders rotate through enabled comments.</string>
+    <string name="custom_comments">YOUR COMMENTS</string>
+    <string name="custom_comments_hint">Add your own line to the rotation.</string>
+    <string name="no_custom_comments">No custom comments yet.</string>
+    <string name="add_comment">ADD A COMMENT</string>
+    <string name="notification_settings">ALERT SETTINGS</string>
+    <string name="notification_settings_hint">Control notification sound, vibration, and importance in Android settings.</string>
+    <string name="open_alert_settings">OPEN ALERT SETTINGS</string>
+    <string name="footer">A nudge, not a wound. If it stops helping, pause it.</string>
+
+    <string name="enabled">Enabled</string>
+    <string name="edit">EDIT</string>
+    <string name="delete">DELETE</string>
+    <string name="comment_enabled_description">Enable comment: %1$s</string>
+    <string name="reminders_armed">Reminders armed.</string>
+    <string name="reminders_paused">Reminders paused.</string>
+    <string name="calculating_next_reminder">Calculating your next reminder…</string>
+    <string name="nothing_scheduled">Nothing is scheduled.</string>
+    <string name="next_hit_format">%1$s · every %2$s</string>
+    <string name="today_at">Today at %1$s</string>
+    <string name="tomorrow_at">Tomorrow at %1$s</string>
+    <string name="interval_hour">hour</string>
+    <string name="interval_minutes">%1$d min</string>
+    <string name="no_enabled_comments">Enable at least one comment to send a reminder.</string>
+    <string name="notifications_off">Notifications are off. You can enable them in Android settings.</string>
+    <string name="notifications_disabled_settings">Notifications are disabled in Android settings.</string>
+    <string name="test_reminder_title">Test reminder</string>
+    <string name="test_sent">Test sent.</string>
+    <string name="add_custom_comment">Add custom comment</string>
+    <string name="edit_custom_comment">Edit custom comment</string>
+    <string name="comment_input_hint">Write a short, blunt reminder</string>
+    <string name="save">SAVE</string>
+    <string name="update">UPDATE</string>
+    <string name="comment_empty">A comment cannot be empty.</string>
+    <string name="comment_too_long">Keep comments to %1$d characters or fewer.</string>
+    <string name="delete_comment_title">Delete comment?</string>
+    <string name="delete_comment_message">This custom comment will be removed from the rotation.</string>
+    <string name="cancel">CANCEL</string>
+    <string name="comment_deleted">Comment deleted.</string>
+
+    <string-array name="interval_labels">
         <item>15 minutes</item>
         <item>30 minutes</item>
         <item>45 minutes</item>
@@ -12,5 +72,17 @@
         <item>90 minutes</item>
         <item>120 minutes</item>
         <item>180 minutes</item>
+    </string-array>
+    <string-array name="preset_comment_messages">
+        <item>You said you would begin. The clock disagrees.</item>
+        <item>Potential is cheap. Follow-through is not.</item>
+        <item>The task is still there. Avoiding it only made it older.</item>
+        <item>Stop treating effort like a personality trait. Do the next thing.</item>
+        <item>Your future plans are not on today&apos;s calendar. You are.</item>
+        <item>Nobody is coming to finish the work you keep postponing.</item>
+        <item>Be less impressive in theory and more useful in practice.</item>
+        <item>You do not need a better mood. You need a smaller first step.</item>
+        <item>The version of you with momentum started before feeling ready.</item>
+        <item>If it matters, give it ten honest minutes instead of another excuse.</item>
     </string-array>
 </resources>

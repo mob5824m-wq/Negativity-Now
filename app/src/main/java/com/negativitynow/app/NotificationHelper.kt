@@ -11,7 +11,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 
 object NotificationHelper {
-    private const val CHANNEL_ID = "blunt_reminders"
+    const val CHANNEL_ID = "blunt_reminders"
 
     fun createChannel(context: Context) {
         val channel = NotificationChannel(

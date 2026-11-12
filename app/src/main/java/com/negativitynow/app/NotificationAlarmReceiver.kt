@@ -14,7 +14,9 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
 
         val now = System.currentTimeMillis()
         if (ScheduleEngine.isInWindow(now, store.scheduleConfig())) {
-            NotificationHelper.postReminder(context, PromptLibrary.messageFor(now))
+            PromptLibrary.messageFor(context, store, now)?.let { message ->
+                NotificationHelper.postReminder(context, message)
+            }
         }
 
         // If Android delayed the alarm past the end of a window, nothing is posted;

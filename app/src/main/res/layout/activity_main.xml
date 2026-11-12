@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-medium"
             android:letterSpacing="0.18"
-            android:text="NEGATIVITY NOW"
+            android:text="@string/brand"
             android:textAllCaps="true"
             android:textColor="@color/acid"
             android:textSize="13sp" />
@@ -31,7 +31,7 @@
             android:layout_marginTop="12dp"
             android:fontFamily="sans-serif-condensed"
             android:letterSpacing="-0.02"
-            android:text="NO MORE\nLATER."
+            android:text="@string/headline"
             android:textColor="@color/paper"
             android:textSize="48sp"
             android:textStyle="bold" />
@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:lineSpacingExtra="2dp"
-            android:text="Set the window. Pick the pace. Get a blunt reminder when it matters."
+            android:text="@string/intro"
             android:textColor="@color/muted"
             android:textSize="16sp" />
 
@@ -65,7 +65,7 @@
                 android:paddingTop="5dp"
                 android:paddingEnd="10dp"
                 android:paddingBottom="5dp"
-                android:text="ARMED"
+                android:text="@string/armed"
                 android:textColor="@color/ink"
                 android:textSize="11sp" />
 
@@ -73,7 +73,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="NEXT HIT"
+                android:text="@string/next_hit"
                 android:textColor="@color/muted"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -94,7 +94,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_button_primary"
                 android:fontFamily="sans-serif-medium"
-                android:text="PAUSE REMINDERS"
+                android:text="@string/pause_reminders"
                 android:textColor="@color/ink"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -103,7 +103,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="YOUR WINDOW"
+            android:text="@string/your_window"
             android:textColor="@color/paper"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -131,7 +131,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="START"
+                        android:text="@string/start"
                         android:textColor="@color/muted"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -142,7 +142,7 @@
                         android:layout_height="48dp"
                         android:layout_marginTop="7dp"
                         android:background="@drawable/bg_time_value"
-                        android:contentDescription="Choose start time"
+                        android:contentDescription="@string/choose_start_time"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/paper"
                         android:textSize="16sp" />
@@ -161,7 +161,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="END"
+                        android:text="@string/end"
                         android:textColor="@color/muted"
                         android:textSize="12sp"
                         android:textStyle="bold" />
@@ -172,7 +172,7 @@
                         android:layout_height="48dp"
                         android:layout_marginTop="7dp"
                         android:background="@drawable/bg_time_value"
-                        android:contentDescription="Choose end time"
+                        android:contentDescription="@string/choose_end_time"
                         android:fontFamily="sans-serif-medium"
                         android:textColor="@color/paper"
                         android:textSize="16sp" />
@@ -189,7 +189,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="REMIND ME EVERY"
+                android:text="@string/remind_me_every"
                 android:textColor="@color/muted"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -200,7 +200,7 @@
                 android:layout_height="52dp"
                 android:layout_marginTop="4dp"
                 android:background="@drawable/bg_time_value"
-                android:contentDescription="Choose notification interval"
+                android:contentDescription="@string/choose_notification_interval"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp" />
 
@@ -209,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:lineSpacingExtra="2dp"
-                android:text="Matching start and end times means all day. Android may batch alerts briefly to protect battery."
+                android:text="@string/window_schedule_hint"
                 android:textColor="@color/muted"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -218,7 +218,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="OPENING VERDICT"
+            android:text="@string/opening_verdict"
             android:textColor="@color/paper"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -247,7 +247,7 @@
                 android:layout_marginTop="18dp"
                 android:background="@drawable/bg_button_secondary"
                 android:fontFamily="sans-serif-medium"
-                android:text="SEND A TEST"
+                android:text="@string/send_test"
                 android:textColor="@color/paper"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -256,7 +256,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
-            android:text="PRESET COMMENTS"
+            android:text="@string/preset_comments"
             android:textColor="@color/paper"
             android:textSize="14sp"
             android:textStyle="bold" />
@@ -272,18 +272,103 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Scheduled reminders rotate through these comments."
+                android:text="@string/preset_comments_hint"
+                android:textColor="@color/muted"
+                android:textSize="13sp" />
+
+            <LinearLayout
+                android:id="@+id/presetList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/custom_comments"
+            android:textColor="@color/paper"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="@dimen/card_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/custom_comments_hint"
                 android:textColor="@color/muted"
                 android:textSize="13sp" />
 
             <TextView
-                android:id="@+id/presetListText"
+                android:id="@+id/customEmptyText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:lineSpacingExtra="3dp"
+                android:text="@string/no_custom_comments"
+                android:textColor="@color/muted"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:id="@+id/customCommentsList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <Button
+                android:id="@+id/addCommentButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_button_secondary"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/add_comment"
                 android:textColor="@color/paper"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            android:text="@string/notification_settings"
+            android:textColor="@color/paper"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_card"
+            android:orientation="vertical"
+            android:padding="@dimen/card_padding">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/notification_settings_hint"
+                android:textColor="@color/muted"
+                android:textSize="13sp" />
+
+            <Button
+                android:id="@+id/alertSettingsButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_button_secondary"
+                android:fontFamily="sans-serif-medium"
+                android:text="@string/open_alert_settings"
+                android:textColor="@color/paper"
+                android:textSize="13sp" />
         </LinearLayout>
 
         <TextView
@@ -292,7 +377,7 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:lineSpacingExtra="2dp"
-            android:text="A nudge, not a wound. If it stops helping, pause it."
+            android:text="@string/footer"
             android:textColor="@color/muted"
             android:textSize="12sp" />
     </LinearLayout>

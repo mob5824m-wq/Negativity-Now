@@ -8,7 +8,8 @@ A small, native Android app for scheduling firm, no-excuses notification prompts
 - Sends a rotating prompt every 15–180 minutes while that window is active.
 - Displays the current prompt in the app as soon as you open it—no opening notification.
 - Reschedules after a reboot, time change, or time-zone change.
-- Includes a visible preset list of comments, a one-tap pause control, and a test-notification button.
+- Includes English and Spanish resources, plus a direct link to Android notification-channel settings for sound, vibration, and importance.
+- Lets you enable or disable individual preset comments, add/edit/delete custom comments, and send a test notification.
 
 Matching start and end times means **all day**. Alerts use Android's idle-friendly, inexact alarms; the operating system may briefly batch an alert to protect battery.
 
@@ -23,7 +24,7 @@ The project deliberately uses platform Android APIs rather than a notification/w
 
 ## Project layout
 
-- `MainActivity.kt` — settings UI, notification permission flow, and in-app opening verdict.
+- `MainActivity.kt` — settings UI, in-app opening verdict, comment controls, and notification-channel settings link.
 - `ScheduleEngine.kt` — pure time-window calculation, including overnight and all-day windows.
 - `NotificationScheduler.kt` — the pending Android alarm.
 - `NotificationAlarmReceiver.kt` — posts a prompt and schedules the following one.

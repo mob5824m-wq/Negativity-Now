@@ -13,7 +13,7 @@ object NotificationScheduler {
 
     fun scheduleNext(context: Context, nowMillis: Long = System.currentTimeMillis()) {
         val store = PreferencesStore(context)
-        if (!store.isArmed) {
+        if (!store.isArmed || PromptLibrary.enabledMessages(context, store).isEmpty()) {
             cancel(context)
             return
         }
