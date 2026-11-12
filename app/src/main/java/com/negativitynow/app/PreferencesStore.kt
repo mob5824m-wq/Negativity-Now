@@ -22,12 +22,71 @@ class PreferencesStore(context: Context) {
         set(value) = preferences.edit().putInt(KEY_END_MINUTE, value.coerceIn(0, MINUTES_PER_DAY - 1)).apply()
 
     var intervalMinutes: Int
-        get() = preferences.getInt(KEY_INTERVAL_MINUTES, DEFAULT_INTERVAL_MINUTES).coerceIn(MIN_INTERVAL_MINUTES, MAX_INTERVAL_MINUTES)
-        set(value) = preferences.edit().putInt(KEY_INTERVAL_MINUTES, value.coerceIn(MIN_INTERVAL_MINUTES, MAX_INTERVAL_MINUTES)).apply()
+        get() = preferences.getInt(KEY_INTERVAL_MINUTES, DEFAULT_INTERVAL_MINUTES)
+            .coerceIn(MIN_INTERVAL_MINUTES, MAX_INTERVAL_MINUTES)
+        set(value) = preferences.edit()
+            .putInt(KEY_INTERVAL_MINUTES, value.coerceIn(MIN_INTERVAL_MINUTES, MAX_INTERVAL_MINUTES))
+            .apply()
 
     var nextTriggerAtMillis: Long
         get() = preferences.getLong(KEY_NEXT_TRIGGER, 0L)
         set(value) = preferences.edit().putLong(KEY_NEXT_TRIGGER, value).apply()
+
+    /** ISO weekday values: Monday is 1 and Sunday is 7. New installs start with every day enabled. */
+    var selectedDays: Set<Int>
+        get() {
+            val stored = preferences.getString(KEY_SELECTED_DAYS, null) ?: return ALL_DAYS
+            return stored.split(',')
+                .mapNotNull { it.toIntOrNull()?.takeIf { value -> value in 1..7 } }
+                .toSet()
+        }
+        set(value) {
+            val normalized = value.filter { it in 1..7 }.toSortedSet()
+            preferences.edit().putString(KEY_SELECTED_DAYS, normalized.joinToString(",")).apply()
+        }
+
+    fun isDayEnabled(dayOfWeek: Int): Boolean = dayOfWeek in selectedDays
+
+    fun setDayEnabled(dayOfWeek: Int, enabled: Boolean) {
+        if (dayOfWeek !in 1..7) return
+        selectedDays = selectedDays.toMutableSet().apply {
+            if (enabled) add(dayOfWeek) else remove(dayOfWeek)
+        }
+    }
+
+    /** When enabled, comments are selected randomly, while avoiding the last delivered comment. */
+    var randomizeComments: Boolean
+        get() = preferences.getBoolean(KEY_RANDOMIZE_COMMENTS, false)
+        set(value) = preferences.edit().putBoolean(KEY_RANDOMIZE_COMMENTS, value).apply()
+
+    var lastDeliveredCommentId: String?
+        get() = preferences.getString(KEY_LAST_DELIVERED_COMMENT_ID, null)?.takeIf { it.isNotBlank() }
+        set(value) = preferences.edit().putString(KEY_LAST_DELIVERED_COMMENT_ID, value).apply()
+
+    var snoozeUntilMillis: Long
+        get() = preferences.getLong(KEY_SNOOZE_UNTIL, 0L)
+        private set(value) = preferences.edit().putLong(KEY_SNOOZE_UNTIL, value).apply()
+
+    var snoozedMessage: String?
+        get() = preferences.getString(KEY_SNOOZED_MESSAGE, null)?.takeIf { it.isNotBlank() }
+        private set(value) = preferences.edit().putString(KEY_SNOOZED_MESSAGE, value).apply()
+
+    fun hasPendingSnooze(nowMillis: Long = System.currentTimeMillis()): Boolean =
+        snoozeUntilMillis > nowMillis && snoozedMessage != null
+
+    fun saveSnooze(message: String, triggerAtMillis: Long) {
+        preferences.edit()
+            .putLong(KEY_SNOOZE_UNTIL, triggerAtMillis)
+            .putString(KEY_SNOOZED_MESSAGE, message)
+            .apply()
+    }
+
+    fun clearSnooze() {
+        preferences.edit()
+            .remove(KEY_SNOOZE_UNTIL)
+            .remove(KEY_SNOOZED_MESSAGE)
+            .apply()
+    }
 
     fun isPresetEnabled(index: Int): Boolean = preferences.getBoolean("$KEY_PRESET_ENABLED$index", true)
 
@@ -75,7 +134,8 @@ class PreferencesStore(context: Context) {
     fun scheduleConfig(): ScheduleConfig = ScheduleConfig(
         startMinute = startMinute,
         endMinute = endMinute,
-        intervalMinutes = intervalMinutes
+        intervalMinutes = intervalMinutes,
+        selectedDays = selectedDays
     )
 
     private fun saveCustomComments(comments: List<CustomComment>) {
@@ -98,13 +158,19 @@ class PreferencesStore(context: Context) {
         const val DEFAULT_START_MINUTE = 9 * 60
         const val DEFAULT_END_MINUTE = 21 * 60
         const val DEFAULT_INTERVAL_MINUTES = 60
+        val ALL_DAYS: Set<Int> = (1..7).toSet()
 
         private const val FILE_NAME = "negativity_now_preferences"
         private const val KEY_ARMED = "armed"
         private const val KEY_START_MINUTE = "start_minute"
         private const val KEY_END_MINUTE = "end_minute"
         private const val KEY_INTERVAL_MINUTES = "interval_minutes"
+        private const val KEY_SELECTED_DAYS = "selected_days"
+        private const val KEY_RANDOMIZE_COMMENTS = "randomize_comments"
+        private const val KEY_LAST_DELIVERED_COMMENT_ID = "last_delivered_comment_id"
         private const val KEY_NEXT_TRIGGER = "next_trigger"
+        private const val KEY_SNOOZE_UNTIL = "snooze_until"
+        private const val KEY_SNOOZED_MESSAGE = "snoozed_message"
         private const val KEY_PRESET_ENABLED = "preset_enabled_"
         private const val KEY_CUSTOM_COMMENTS = "custom_comments"
         private const val CUSTOM_ID = "id"

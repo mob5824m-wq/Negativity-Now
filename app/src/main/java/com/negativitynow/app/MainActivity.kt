@@ -19,6 +19,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.Spinner
@@ -38,13 +39,15 @@ class MainActivity : Activity() {
     private lateinit var startTimeButton: Button
     private lateinit var endTimeButton: Button
     private lateinit var intervalSpinner: Spinner
+    private lateinit var daySelector: LinearLayout
     private lateinit var previewText: TextView
     private lateinit var testButton: Button
+    private lateinit var randomizeCommentsSwitch: Switch
     private lateinit var presetList: LinearLayout
     private lateinit var customCommentsList: LinearLayout
     private lateinit var customEmptyText: TextView
     private var bindingValues = false
-    private var pendingTestMessage: String? = null
+    private var pendingTestMessage: CommentOption? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,8 +76,10 @@ class MainActivity : Activity() {
         startTimeButton = findViewById(R.id.startTimeButton)
         endTimeButton = findViewById(R.id.endTimeButton)
         intervalSpinner = findViewById(R.id.intervalSpinner)
+        daySelector = findViewById(R.id.daySelector)
         previewText = findViewById(R.id.previewText)
         testButton = findViewById(R.id.testButton)
+        randomizeCommentsSwitch = findViewById(R.id.randomizeCommentsSwitch)
         presetList = findViewById(R.id.presetList)
         customCommentsList = findViewById(R.id.customCommentsList)
         customEmptyText = findViewById(R.id.customEmptyText)
@@ -117,6 +122,14 @@ class MainActivity : Activity() {
             }
         }
 
+        randomizeCommentsSwitch.setOnCheckedChangeListener { _, checked ->
+            if (bindingValues) return@setOnCheckedChangeListener
+            if (store.randomizeComments != checked) {
+                store.randomizeComments = checked
+                onCommentsChanged()
+            }
+        }
+
         testButton.setOnClickListener { sendTestReminder() }
         findViewById<Button>(R.id.addCommentButton).setOnClickListener { showCustomCommentDialog() }
         findViewById<Button>(R.id.alertSettingsButton).setOnClickListener { openAlertSettings() }
@@ -127,6 +140,8 @@ class MainActivity : Activity() {
         startTimeButton.text = formatMinute(store.startMinute)
         endTimeButton.text = formatMinute(store.endMinute)
         intervalSpinner.setSelection(INTERVAL_OPTIONS.indexOf(store.intervalMinutes).coerceAtLeast(0), false)
+        randomizeCommentsSwitch.isChecked = store.randomizeComments
+        renderDaySelector()
 
         val currentMessage = PromptLibrary.messageFor(this, store)
         previewText.text = currentMessage ?: getString(R.string.no_enabled_comments)
@@ -141,7 +156,9 @@ class MainActivity : Activity() {
             armButton.setText(R.string.pause_reminders)
             val planned = store.nextTriggerAtMillis
             nextHit.text = when {
+                store.selectedDays.isEmpty() -> getString(R.string.no_days_selected)
                 currentMessage == null -> getString(R.string.no_enabled_comments)
+                store.hasPendingSnooze() -> getString(R.string.snoozed_until, formatNextTime(store.snoozeUntilMillis))
                 planned > System.currentTimeMillis() -> getString(
                     R.string.next_hit_format,
                     formatNextTime(planned),
@@ -157,6 +174,38 @@ class MainActivity : Activity() {
             nextHit.setText(R.string.nothing_scheduled)
         }
         bindingValues = false
+        WidgetUpdater.update(this)
+    }
+
+    private fun renderDaySelector() {
+        daySelector.removeAllViews()
+        val selectedDays = store.selectedDays
+        (1..7).toList().chunked(4).forEach { rowDays ->
+            val row = LinearLayout(this).apply {
+                orientation = LinearLayout.HORIZONTAL
+                gravity = Gravity.CENTER_VERTICAL
+            }
+            rowDays.forEach { day ->
+                row.addView(CheckBox(this).apply {
+                    text = getString(DAY_SHORT_LABEL_RESOURCES[day - 1])
+                    isAllCaps = false
+                    setTextColor(getColor(R.color.paper))
+                    textSize = 13f
+                    contentDescription = getString(
+                        R.string.day_enabled_description,
+                        getString(DAY_FULL_LABEL_RESOURCES[day - 1])
+                    )
+                    isChecked = day in selectedDays
+                    setOnCheckedChangeListener { _, checked ->
+                        if (bindingValues) return@setOnCheckedChangeListener
+                        store.setDayEnabled(day, checked)
+                        if (store.isArmed) NotificationScheduler.scheduleNext(this@MainActivity)
+                        render()
+                    }
+                }, LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f))
+            }
+            daySelector.addView(row)
+        }
     }
 
     private fun renderCommentLists() {
@@ -352,7 +401,7 @@ class MainActivity : Activity() {
     }
 
     private fun sendTestReminder() {
-        val message = PromptLibrary.messageFor(this, store)
+        val message = PromptLibrary.nextMessage(this, store)
         if (message == null) {
             Toast.makeText(this, R.string.no_enabled_comments, Toast.LENGTH_SHORT).show()
             return
@@ -369,9 +418,12 @@ class MainActivity : Activity() {
         postTestReminder(message)
     }
 
-    private fun postTestReminder(message: String) {
-        NotificationHelper.postReminder(this, message, getString(R.string.test_reminder_title))
-        Toast.makeText(this, R.string.test_sent, Toast.LENGTH_SHORT).show()
+    private fun postTestReminder(message: CommentOption) {
+        if (NotificationHelper.postReminder(this, message.text, getString(R.string.test_reminder_title))) {
+            PromptLibrary.recordDelivered(store, message)
+            render()
+            Toast.makeText(this, R.string.test_sent, Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun formatMinute(totalMinutes: Int): String {
@@ -417,6 +469,24 @@ class MainActivity : Activity() {
             R.string.interval_label_90,
             R.string.interval_label_120,
             R.string.interval_label_180
+        )
+        private val DAY_SHORT_LABEL_RESOURCES = intArrayOf(
+            R.string.day_short_monday,
+            R.string.day_short_tuesday,
+            R.string.day_short_wednesday,
+            R.string.day_short_thursday,
+            R.string.day_short_friday,
+            R.string.day_short_saturday,
+            R.string.day_short_sunday
+        )
+        private val DAY_FULL_LABEL_RESOURCES = intArrayOf(
+            R.string.day_monday,
+            R.string.day_tuesday,
+            R.string.day_wednesday,
+            R.string.day_thursday,
+            R.string.day_friday,
+            R.string.day_saturday,
+            R.string.day_sunday
         )
     }
 }

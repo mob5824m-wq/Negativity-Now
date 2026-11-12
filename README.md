@@ -4,14 +4,16 @@ A small, native Android app for scheduling firm, no-excuses notification prompts
 
 ## What it does
 
-- Lets you select a **start** and **end** time (including overnight windows).
+- Lets you select a **start** and **end** time (including overnight windows) and the days on which that window runs.
 - Sends a rotating prompt every 15–180 minutes while that window is active.
+- Offers **Snooze 10 min**, **Snooze 30 min**, and **Snooze 1 hr** actions on every reminder. Snoozing temporarily holds the regular sequence, then resumes it after the deferred reminder is delivered.
 - Displays the current prompt in the app as soon as you open it—no opening notification.
-- Reschedules after a reboot, time change, or time-zone change.
+- Includes a compact home-screen widget with the current verdict and the next reminder or snooze time.
+- Reschedules after a reboot, time change, or time-zone change, including a pending snooze.
 - Includes English, Spanish, and French resources, plus a direct link to Android notification-channel settings for sound, vibration, and importance.
-- Lets you enable or disable individual preset comments, add/edit/delete custom comments, and send a test notification.
+- Lets you enable or disable individual preset comments, add/edit/delete custom comments, shuffle enabled comments without immediate repeats, and send a test notification.
 
-Matching start and end times means **all day**. Alerts use Android's idle-friendly, inexact alarms; the operating system may briefly batch an alert to protect battery.
+Matching start and end times means **all day**. For an overnight window, select the day the window starts; for example, a Tuesday 21:00–07:00 window also runs into Wednesday morning. Alerts use Android's idle-friendly, inexact alarms; the operating system may briefly batch an alert to protect battery.
 
 ## Run it
 
@@ -24,7 +26,7 @@ The project deliberately uses platform Android APIs rather than a notification/w
 
 ## Quality and releases
 
-`python3 scripts/quality_checks.py` enforces the product rule: **the app does not send a notification specifically when the user opens or foregrounds it.** It verifies that lifecycle methods do not post a reminder and that a notification-permission response can only complete an explicit test-notification request.
+`python3 scripts/quality_checks.py` enforces the product rule: **the app does not send a notification specifically when the user opens or foregrounds it.** It verifies that lifecycle methods do not post a reminder and that a notification-permission response can only complete an explicit test-notification request. It also checks snooze, day-scheduling, widget wiring, and English/Spanish/French string-name parity.
 
 The GitHub **Quality checks** workflow runs this guard on pull requests and pushes. It also builds, verifies, and uploads an installable debug APK named `negativity-now-debug-apk` as a workflow artifact.
 
@@ -32,8 +34,10 @@ The **Release Android APK** workflow runs the quality guard again, creates the s
 
 ## Project layout
 
-- `MainActivity.kt` — settings UI, in-app opening verdict, comment controls, and notification-channel settings link.
-- `ScheduleEngine.kt` — pure time-window calculation, including overnight and all-day windows.
-- `NotificationScheduler.kt` — the pending Android alarm.
+- `MainActivity.kt` — settings UI, day selector, in-app opening verdict, comment controls, and notification-channel settings link.
+- `ScheduleEngine.kt` — pure time-window calculation, including selected weekdays, overnight, and all-day windows.
+- `NotificationScheduler.kt` — the pending regular or snoozed Android alarm.
 - `NotificationAlarmReceiver.kt` — posts a prompt and schedules the following one.
-- `RescheduleReceiver.kt` — restores an active schedule after reboot or clock changes.
+- `SnoozeReceiver.kt` — handles notification snooze actions and the deferred delivery.
+- `NegativityWidgetProvider.kt` — maintains the home-screen verdict and next-reminder widget.
+- `RescheduleReceiver.kt` — restores an active schedule or snooze after reboot or clock changes.

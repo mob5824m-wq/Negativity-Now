@@ -14,8 +14,10 @@ class NotificationAlarmReceiver : BroadcastReceiver() {
 
         val now = System.currentTimeMillis()
         if (ScheduleEngine.isInWindow(now, store.scheduleConfig())) {
-            PromptLibrary.messageFor(context, store, now)?.let { message ->
-                NotificationHelper.postReminder(context, message)
+            PromptLibrary.nextMessage(context, store)?.let { message ->
+                if (NotificationHelper.postReminder(context, message.text)) {
+                    PromptLibrary.recordDelivered(store, message)
+                }
             }
         }
 

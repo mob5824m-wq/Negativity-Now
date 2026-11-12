@@ -7,7 +7,9 @@ import java.time.ZonedDateTime
 data class ScheduleConfig(
     val startMinute: Int,
     val endMinute: Int,
-    val intervalMinutes: Int
+    val intervalMinutes: Int,
+    /** ISO weekday values: Monday is 1 and Sunday is 7. */
+    val selectedDays: Set<Int> = PreferencesStore.ALL_DAYS
 )
 
 /**
@@ -15,9 +17,23 @@ data class ScheduleConfig(
  * schedule inside the user's time window without requiring an always-running service.
  */
 object ScheduleEngine {
+    /**
+     * A selected day denotes the day on which the window begins. For an overnight
+     * window, an early-morning time belongs to the previous day's selected window.
+     */
     fun isInWindow(nowMillis: Long, config: ScheduleConfig, zone: ZoneId = ZoneId.systemDefault()): Boolean {
+        if (config.selectedDays.isEmpty()) return false
         val now = Instant.ofEpochMilli(nowMillis).atZone(zone)
-        return isMinuteInWindow(now.hour * 60 + now.minute, config.startMinute, config.endMinute)
+        val minute = now.hour * 60 + now.minute
+        return when {
+            config.startMinute == config.endMinute -> now.dayOfWeek.value in config.selectedDays
+            config.startMinute < config.endMinute ->
+                minute >= config.startMinute && minute < config.endMinute &&
+                    now.dayOfWeek.value in config.selectedDays
+            minute >= config.startMinute -> now.dayOfWeek.value in config.selectedDays
+            minute < config.endMinute -> now.minusDays(1).dayOfWeek.value in config.selectedDays
+            else -> false
+        }
     }
 
     fun nextTriggerAt(
@@ -25,44 +41,36 @@ object ScheduleEngine {
         config: ScheduleConfig,
         zone: ZoneId = ZoneId.systemDefault()
     ): Long {
+        require(config.selectedDays.isNotEmpty()) { "At least one day must be selected." }
         val now = Instant.ofEpochMilli(nowMillis).atZone(zone)
         val interval = config.intervalMinutes.coerceIn(
             PreferencesStore.MIN_INTERVAL_MINUTES,
             PreferencesStore.MAX_INTERVAL_MINUTES
         )
 
-        // A matching pair is deliberately useful: it means "all day" in the UI.
-        if (config.startMinute == config.endMinute) {
-            return now.plusMinutes(interval.toLong()).toInstant().toEpochMilli()
-        }
-
-        if (isMinuteInWindow(now.hour * 60 + now.minute, config.startMinute, config.endMinute)) {
+        if (isInWindow(nowMillis, config, zone)) {
             val candidate = now.plusMinutes(interval.toLong())
-            if (isMinuteInWindow(candidate.hour * 60 + candidate.minute, config.startMinute, config.endMinute)) {
+            if (isInWindow(candidate.toInstant().toEpochMilli(), config, zone)) {
                 return candidate.toInstant().toEpochMilli()
             }
         }
 
-        return nextWindowStartAfter(now, config.startMinute, zone).toInstant().toEpochMilli()
-    }
-
-    private fun isMinuteInWindow(minute: Int, start: Int, end: Int): Boolean = when {
-        start == end -> true
-        start < end -> minute >= start && minute < end
-        else -> minute >= start || minute < end // Window crosses midnight.
+        return nextWindowStartAfter(now, config, zone).toInstant().toEpochMilli()
     }
 
     private fun nextWindowStartAfter(
         reference: ZonedDateTime,
-        startMinute: Int,
+        config: ScheduleConfig,
         zone: ZoneId
     ): ZonedDateTime {
-        fun atStart(daysFromToday: Long): ZonedDateTime = reference.toLocalDate()
-            .plusDays(daysFromToday)
-            .atStartOfDay(zone)
-            .plusMinutes(startMinute.toLong())
-
-        val todayStart = atStart(0)
-        return if (todayStart.isAfter(reference)) todayStart else atStart(1)
+        // One full week is enough to find a selected day. The extra day makes the
+        // search resilient around daylight-saving transitions.
+        for (daysFromToday in 0L..7L) {
+            val date = reference.toLocalDate().plusDays(daysFromToday)
+            if (date.dayOfWeek.value !in config.selectedDays) continue
+            val candidate = date.atStartOfDay(zone).plusMinutes(config.startMinute.toLong())
+            if (candidate.isAfter(reference)) return candidate
+        }
+        error("At least one selected day must have a future window start.")
     }
 }
