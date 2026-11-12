@@ -22,10 +22,6 @@ class PreferencesStore(context: Context) {
         get() = preferences.getInt(KEY_INTERVAL_MINUTES, DEFAULT_INTERVAL_MINUTES).coerceIn(MIN_INTERVAL_MINUTES, MAX_INTERVAL_MINUTES)
         set(value) = preferences.edit().putInt(KEY_INTERVAL_MINUTES, value.coerceIn(MIN_INTERVAL_MINUTES, MAX_INTERVAL_MINUTES)).apply()
 
-    var notifyOnOpen: Boolean
-        get() = preferences.getBoolean(KEY_NOTIFY_ON_OPEN, true)
-        set(value) = preferences.edit().putBoolean(KEY_NOTIFY_ON_OPEN, value).apply()
-
     var nextTriggerAtMillis: Long
         get() = preferences.getLong(KEY_NEXT_TRIGGER, 0L)
         set(value) = preferences.edit().putLong(KEY_NEXT_TRIGGER, value).apply()
@@ -49,7 +45,6 @@ class PreferencesStore(context: Context) {
         private const val KEY_START_MINUTE = "start_minute"
         private const val KEY_END_MINUTE = "end_minute"
         private const val KEY_INTERVAL_MINUTES = "interval_minutes"
-        private const val KEY_NOTIFY_ON_OPEN = "notify_on_open"
         private const val KEY_NEXT_TRIGGER = "next_trigger"
     }
 }

@@ -13,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import java.text.SimpleDateFormat
@@ -29,8 +28,8 @@ class MainActivity : Activity() {
     private lateinit var startTimeButton: Button
     private lateinit var endTimeButton: Button
     private lateinit var intervalSpinner: Spinner
-    private lateinit var openSwitch: Switch
     private lateinit var previewText: TextView
+    private lateinit var presetListText: TextView
     private var bindingValues = false
     private var pendingTestNotification = false
 
@@ -47,11 +46,11 @@ class MainActivity : Activity() {
         if (store.isArmed && store.nextTriggerAtMillis <= System.currentTimeMillis()) {
             NotificationScheduler.scheduleNext(this)
         }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        requestPermissionThenDeliverOpenReminder()
+        // Opening the app shows the verdict in-app, but scheduled alerts still need
+        // the Android 13+ notification permission to work.
+        if (store.isArmed && needsNotificationPermission()) {
+            requestNotificationsPermission()
+        }
     }
 
     private fun bindViews() {
@@ -61,8 +60,8 @@ class MainActivity : Activity() {
         startTimeButton = findViewById(R.id.startTimeButton)
         endTimeButton = findViewById(R.id.endTimeButton)
         intervalSpinner = findViewById(R.id.intervalSpinner)
-        openSwitch = findViewById(R.id.openSwitch)
         previewText = findViewById(R.id.previewText)
+        presetListText = findViewById(R.id.presetListText)
 
         val intervalLabels = resources.getStringArray(R.array.interval_minutes)
         intervalSpinner.adapter = ArrayAdapter(
@@ -102,10 +101,6 @@ class MainActivity : Activity() {
             }
         }
 
-        openSwitch.setOnCheckedChangeListener { _, checked ->
-            if (!bindingValues) store.notifyOnOpen = checked
-        }
-
         findViewById<Button>(R.id.testButton).setOnClickListener {
             sendTestReminder()
         }
@@ -115,9 +110,9 @@ class MainActivity : Activity() {
         bindingValues = true
         startTimeButton.text = formatMinute(store.startMinute)
         endTimeButton.text = formatMinute(store.endMinute)
-        openSwitch.isChecked = store.notifyOnOpen
         intervalSpinner.setSelection(INTERVAL_OPTIONS.indexOf(store.intervalMinutes).coerceAtLeast(0), false)
         previewText.text = PromptLibrary.messageFor()
+        presetListText.text = PromptLibrary.formattedPresetList()
 
         if (store.isArmed) {
             statusPill.text = "ARMED"
@@ -158,15 +153,6 @@ class MainActivity : Activity() {
         ).show()
     }
 
-    private fun requestPermissionThenDeliverOpenReminder() {
-        if (!store.isArmed || !store.notifyOnOpen) return
-        if (needsNotificationPermission()) {
-            requestNotificationsPermission()
-        } else {
-            deliverOpenReminder()
-        }
-    }
-
     private fun needsNotificationPermission(): Boolean =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
@@ -188,21 +174,11 @@ class MainActivity : Activity() {
             if (pendingTestNotification) {
                 pendingTestNotification = false
                 postTestReminder()
-            } else if (store.isArmed && store.notifyOnOpen) {
-                deliverOpenReminder()
             }
         } else if (requestCode == REQUEST_NOTIFICATIONS) {
             pendingTestNotification = false
             Toast.makeText(this, "Notifications are off. You can enable them in Android settings.", Toast.LENGTH_LONG).show()
         }
-    }
-
-    private fun deliverOpenReminder() {
-        NotificationHelper.postReminder(
-            this,
-            PromptLibrary.appOpenMessage(),
-            "You are here."
-        )
     }
 
     private fun sendTestReminder() {

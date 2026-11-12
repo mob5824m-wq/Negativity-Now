@@ -1,8 +1,8 @@
 package com.negativitynow.app
 
-/** Short prompts designed to be firm and challenging rather than demeaning. */
+/** Preloaded prompts used for both scheduled reminders and the in-app opening verdict. */
 object PromptLibrary {
-    private val prompts = listOf(
+    val presets: List<String> = listOf(
         "You said you would begin. The clock disagrees.",
         "Potential is cheap. Follow-through is not.",
         "The task is still there. Avoiding it only made it older.",
@@ -16,9 +16,11 @@ object PromptLibrary {
     )
 
     fun messageFor(timestampMillis: Long = System.currentTimeMillis()): String {
-        val index = ((timestampMillis / 60_000L) % prompts.size).toInt()
-        return prompts[index]
+        val index = ((timestampMillis / 60_000L) % presets.size).toInt()
+        return presets[index]
     }
 
-    fun appOpenMessage(): String = "You opened the app. That counts for nothing until you do the work."
+    fun formattedPresetList(): String = presets.mapIndexed { index, message ->
+        "${index + 1}. $message"
+    }.joinToString(separator = "\n\n")
 }
