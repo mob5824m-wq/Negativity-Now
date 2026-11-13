@@ -1,6 +1,6 @@
 # Negativity Now
 
-A small, native Android app for scheduling firm, no-excuses notification prompts. It supports Android 4.0 (API 14) and newer.
+A small, native Android app for scheduling firm, no-excuses notification prompts. It supports Android 4.0 (API 14) and newer, and targets Android 15 (API 35).
 
 ## What it does
 
@@ -8,6 +8,7 @@ A small, native Android app for scheduling firm, no-excuses notification prompts
 - Sends a rotating prompt every 15–180 minutes while that window is active.
 - Offers **Snooze 10 min**, **Snooze 30 min**, and **Snooze 1 hr** actions on every reminder. Snoozing temporarily holds the regular sequence, then resumes it after the deferred reminder is delivered. Android 4.1+ can show these action buttons; Android 4.0 still receives the reminder but its platform does not provide notification action buttons.
 - Displays the current prompt in the app as soon as you open it—no opening notification.
+- Handles system-bar and display-cutout insets for modern edge-to-edge Android screens, including Android 15’s API 35 behavior.
 - Includes a compact home-screen widget with the current verdict and the next reminder or snooze time.
 - Reschedules after a reboot, time change, or time-zone change, including a pending snooze.
 - Includes English, Spanish, and French resources, plus a direct link to Android notification-channel settings for sound, vibration, and importance.

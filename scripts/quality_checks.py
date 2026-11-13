@@ -15,6 +15,7 @@ SCHEDULE_ENGINE = ROOT / "app/src/main/java/com/negativitynow/app/ScheduleEngine
 SCHEDULER = ROOT / "app/src/main/java/com/negativitynow/app/NotificationScheduler.kt"
 SNOOZE_RECEIVER = ROOT / "app/src/main/java/com/negativitynow/app/SnoozeReceiver.kt"
 WIDGET_PROVIDER = ROOT / "app/src/main/java/com/negativitynow/app/NegativityWidgetProvider.kt"
+MODERN_WINDOW = ROOT / "app/src/main/java/com/negativitynow/app/ModernWindowCompat.kt"
 BUILD_FILE = ROOT / "app/build.gradle.kts"
 LEGACY_STATUS_ICON = ROOT / "app/src/main/res/drawable/ic_stat_mark.png"
 VALUES = ROOT / "app/src/main/res/values/strings.xml"
@@ -86,6 +87,8 @@ def check_selected_features_are_wired() -> None:
     schedule_engine = SCHEDULE_ENGINE.read_text(encoding="utf-8")
     widget_provider = WIDGET_PROVIDER.read_text(encoding="utf-8")
     build_file = BUILD_FILE.read_text(encoding="utf-8")
+    main_activity = MAIN_ACTIVITY.read_text(encoding="utf-8")
+    modern_window = MODERN_WINDOW.read_text(encoding="utf-8")
 
     assert manifest.count(".SnoozeReceiver") == 1, "SnoozeReceiver must be registered in the manifest."
     assert ".NegativityWidgetProvider" in manifest, "The home-screen widget must be registered."
@@ -103,6 +106,15 @@ def check_selected_features_are_wired() -> None:
         "Scheduling must avoid java.time so Android 4.0 can run without desugaring."
     )
     assert "minSdk = 14" in build_file, "The app must support Android 4.0 (API 14)."
+    assert "compileSdk = 35" in build_file and "targetSdk = 35" in build_file, (
+        "The app must continue targeting modern Android API 35."
+    )
+    assert "configureEdgeToEdge" in main_activity and "ModernWindowCompat.configure" in main_activity, (
+        "The main screen must opt into modern edge-to-edge handling."
+    )
+    assert "WindowInsetsCompat.Type.systemBars" in modern_window, (
+        "Modern Android system-bar insets must be applied to the main screen."
+    )
     assert "androidx.core:core" in build_file, "Android 4.x notification compatibility support is missing."
     assert "Theme.Holo.NoActionBar" in manifest, "Android 4.0 needs an Android 4-compatible app theme."
     assert LEGACY_STATUS_ICON.is_file(), "Android 4.x needs a bitmap fallback for the notification icon."

@@ -52,6 +52,7 @@ class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        configureEdgeToEdge()
 
         store = PreferencesStore(this)
         NotificationHelper.createChannel(this)
@@ -66,6 +67,16 @@ class MainActivity : Activity() {
         // the Android 13+ notification permission to work.
         if (store.isArmed && needsNotificationPermission()) {
             requestNotificationsPermission()
+        }
+    }
+
+    /**
+     * Android 15 enforces edge-to-edge for apps targeting API 35. Opt in deliberately
+     * and keep the scrollable content clear of system bars and display cutouts.
+     */
+    private fun configureEdgeToEdge() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            ModernWindowCompat.configure(this, findViewById(R.id.rootScroll))
         }
     }
 
