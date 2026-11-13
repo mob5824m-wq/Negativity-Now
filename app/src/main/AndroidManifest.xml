@@ -7,9 +7,8 @@
         android:allowBackup="true"
         android:icon="@drawable/negativity_now_logo"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/negativity_now_logo"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.NoActionBar">
+        android:theme="@android:style/Theme.Holo.NoActionBar">
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -40,7 +39,6 @@
 
         <receiver
             android:name=".RescheduleReceiver"
-            android:directBootAware="false"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

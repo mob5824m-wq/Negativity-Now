@@ -1,12 +1,12 @@
 # Negativity Now
 
-A small, native Android app for scheduling firm, no-excuses notification prompts.
+A small, native Android app for scheduling firm, no-excuses notification prompts. It supports Android 4.0 (API 14) and newer.
 
 ## What it does
 
 - Lets you select a **start** and **end** time (including overnight windows) and the days on which that window runs.
 - Sends a rotating prompt every 15–180 minutes while that window is active.
-- Offers **Snooze 10 min**, **Snooze 30 min**, and **Snooze 1 hr** actions on every reminder. Snoozing temporarily holds the regular sequence, then resumes it after the deferred reminder is delivered.
+- Offers **Snooze 10 min**, **Snooze 30 min**, and **Snooze 1 hr** actions on every reminder. Snoozing temporarily holds the regular sequence, then resumes it after the deferred reminder is delivered. Android 4.1+ can show these action buttons; Android 4.0 still receives the reminder but its platform does not provide notification action buttons.
 - Displays the current prompt in the app as soon as you open it—no opening notification.
 - Includes a compact home-screen widget with the current verdict and the next reminder or snooze time.
 - Reschedules after a reboot, time change, or time-zone change, including a pending snooze.
@@ -18,11 +18,11 @@ Matching start and end times means **all day**. For an overnight window, select 
 ## Run it
 
 1. Open this folder in the latest stable Android Studio.
-2. Let Gradle sync and install the `app` configuration on an Android 8.0+ device or emulator.
-3. On Android 13+, allow notifications when prompted.
+2. Let Gradle sync and install the `app` configuration on an Android 4.0+ device or emulator.
+3. On Android 13+, allow notifications when prompted. Earlier Android versions use their system-wide app-notification controls.
 4. Choose your window and interval, then tap **ARM REMINDERS** if they are paused.
 
-The project deliberately uses platform Android APIs rather than a notification/work scheduling library. This keeps the schedule readable and ensures the app can put the next one-shot notification back on the queue after every delivery.
+The project deliberately uses platform scheduling APIs plus AndroidX’s lightweight notification compatibility layer. This keeps the schedule readable, preserves Android 4.x notification support, and ensures the app can put the next one-shot notification back on the queue after every delivery.
 
 ## Quality and releases
 

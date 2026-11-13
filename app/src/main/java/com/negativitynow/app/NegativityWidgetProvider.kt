@@ -61,7 +61,7 @@ object WidgetUpdater {
             context,
             801,
             openAppIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            AndroidCompat.pendingIntentFlags()
         )
 
         return RemoteViews(context.packageName, R.layout.widget_negativity_now).apply {

@@ -34,7 +34,7 @@ object NotificationScheduler {
         }
 
         val triggerAt = ScheduleEngine.nextTriggerAt(nowMillis, store.scheduleConfig())
-        val alarmManager = context.getSystemService(AlarmManager::class.java)
+        val alarmManager = AndroidCompat.alarmManager(context)
         val pendingIntent = regularAlarmPendingIntent(context)
         alarmManager.cancel(pendingIntent)
         setInexactAlarm(alarmManager, triggerAt, pendingIntent)
@@ -58,7 +58,7 @@ object NotificationScheduler {
         cancelSnoozeAlarm(context)
         store.saveSnooze(message, triggerAt)
         store.nextTriggerAtMillis = triggerAt
-        val alarmManager = context.getSystemService(AlarmManager::class.java)
+        val alarmManager = AndroidCompat.alarmManager(context)
         setInexactAlarm(alarmManager, triggerAt, snoozeAlarmPendingIntent(context))
         WidgetUpdater.update(context)
     }
@@ -71,7 +71,7 @@ object NotificationScheduler {
             return
         }
         if (store.hasPendingSnooze(nowMillis)) {
-            val alarmManager = context.getSystemService(AlarmManager::class.java)
+            val alarmManager = AndroidCompat.alarmManager(context)
             setInexactAlarm(alarmManager, store.snoozeUntilMillis, snoozeAlarmPendingIntent(context))
             store.nextTriggerAtMillis = store.snoozeUntilMillis
             WidgetUpdater.update(context)
@@ -100,18 +100,18 @@ object NotificationScheduler {
         // Inexact idle-friendly alarms need no special exact-alarm permission and are
         // the right trade-off for a periodic reminder app.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
+            IdleAlarmCompat.setAndAllowWhileIdle(alarmManager, triggerAt, pendingIntent)
         } else {
             alarmManager.set(AlarmManager.RTC_WAKEUP, triggerAt, pendingIntent)
         }
     }
 
     private fun cancelRegularAlarm(context: Context) {
-        context.getSystemService(AlarmManager::class.java).cancel(regularAlarmPendingIntent(context))
+        AndroidCompat.alarmManager(context).cancel(regularAlarmPendingIntent(context))
     }
 
     private fun cancelSnoozeAlarm(context: Context) {
-        context.getSystemService(AlarmManager::class.java).cancel(snoozeAlarmPendingIntent(context))
+        AndroidCompat.alarmManager(context).cancel(snoozeAlarmPendingIntent(context))
     }
 
     private fun regularAlarmPendingIntent(context: Context): PendingIntent {
@@ -122,7 +122,7 @@ object NotificationScheduler {
             context,
             ALARM_REQUEST_CODE,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            AndroidCompat.pendingIntentFlags()
         )
     }
 
@@ -134,7 +134,7 @@ object NotificationScheduler {
             context,
             SNOOZE_ALARM_REQUEST_CODE,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            AndroidCompat.pendingIntentFlags()
         )
     }
 

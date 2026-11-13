@@ -1,39 +1,29 @@
 package com.negativitynow.app
 
-import android.Manifest
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 
 object NotificationHelper {
     const val CHANNEL_ID = "blunt_reminders"
 
     fun createChannel(context: Context) {
-        val channel = NotificationChannel(
-            CHANNEL_ID,
-            context.getString(R.string.channel_name),
-            NotificationManager.IMPORTANCE_HIGH
-        ).apply {
-            description = context.getString(R.string.channel_description)
-            enableVibration(true)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannelCompat.createChannel(context)
         }
-        context.getSystemService(NotificationManager::class.java).createNotificationChannel(channel)
     }
 
     fun canPost(context: Context): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+            NotificationPermissionCompat.needsPermissionForContext(context)
         ) {
             return false
         }
-        val manager = context.getSystemService(NotificationManager::class.java)
-        return Build.VERSION.SDK_INT < Build.VERSION_CODES.N || manager.areNotificationsEnabled()
+        return NotificationManagerCompat.from(context).areNotificationsEnabled()
     }
 
     fun postReminder(
@@ -51,22 +41,36 @@ object NotificationHelper {
             context,
             0,
             openAppIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            AndroidCompat.pendingIntentFlags()
         )
         val notificationId = (System.currentTimeMillis() and 0x7fffffff).toInt()
-        val notification = Notification.Builder(context, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_stat_mark)
             .setContentTitle(title)
             .setContentText(message)
-            .setStyle(Notification.BigTextStyle().bigText(message))
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
             .setContentIntent(contentIntent)
             .setAutoCancel(true)
-            .setCategory(Notification.CATEGORY_REMINDER)
-            .addAction(0, context.getString(R.string.snooze_10), snoozePendingIntent(context, message, 10, notificationId))
-            .addAction(0, context.getString(R.string.snooze_30), snoozePendingIntent(context, message, 30, notificationId))
-            .addAction(0, context.getString(R.string.snooze_60), snoozePendingIntent(context, message, 60, notificationId))
+            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .addAction(
+                0,
+                context.getString(R.string.snooze_10),
+                snoozePendingIntent(context, message, 10, notificationId)
+            )
+            .addAction(
+                0,
+                context.getString(R.string.snooze_30),
+                snoozePendingIntent(context, message, 30, notificationId)
+            )
+            .addAction(
+                0,
+                context.getString(R.string.snooze_60),
+                snoozePendingIntent(context, message, 60, notificationId)
+            )
             .build()
-        context.getSystemService(NotificationManager::class.java).notify(notificationId, notification)
+
+        NotificationManagerCompat.from(context).notify(notificationId, notification)
         return true
     }
 
@@ -87,7 +91,7 @@ object NotificationHelper {
             context,
             SNOOZE_REQUEST_CODE_BASE + minutes,
             intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            AndroidCompat.pendingIntentFlags()
         )
     }
 

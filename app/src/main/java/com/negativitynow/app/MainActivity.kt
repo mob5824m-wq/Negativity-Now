@@ -1,12 +1,12 @@
 package com.negativitynow.app
 
-import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.TimePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -189,7 +189,7 @@ class MainActivity : Activity() {
                 row.addView(CheckBox(this).apply {
                     text = getString(DAY_SHORT_LABEL_RESOURCES[day - 1])
                     isAllCaps = false
-                    setTextColor(getColor(R.color.paper))
+                    setTextColor(AndroidCompat.color(this, R.color.paper))
                     textSize = 13f
                     contentDescription = getString(
                         R.string.day_enabled_description,
@@ -250,24 +250,26 @@ class MainActivity : Activity() {
         onDelete: (() -> Unit)? = null
     ): LinearLayout = LinearLayout(this).apply {
         orientation = LinearLayout.VERTICAL
-        background = getDrawable(R.drawable.bg_time_value)
+        AndroidCompat.setBackground(this, R.drawable.bg_time_value)
         setPadding(dp(12), dp(10), dp(12), dp(8))
 
         addView(TextView(this@MainActivity).apply {
             text = option.text
-            setTextColor(getColor(R.color.paper))
+            setTextColor(AndroidCompat.color(this, R.color.paper))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
-            setLineSpacing(dp(2).toFloat(), 1f)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                TextLayoutCompat.setLineSpacing(this, dp(2).toFloat())
+            }
         })
 
         addView(LinearLayout(this@MainActivity).apply {
-            gravity = Gravity.CENTER_VERTICAL or Gravity.END
+            gravity = Gravity.CENTER_VERTICAL or Gravity.RIGHT
             orientation = LinearLayout.HORIZONTAL
             setPadding(0, dp(8), 0, 0)
 
             addView(Switch(this@MainActivity).apply {
                 text = getString(R.string.enabled)
-                setTextColor(getColor(R.color.muted))
+                setTextColor(AndroidCompat.color(this, R.color.muted))
                 contentDescription = getString(R.string.comment_enabled_description, option.text)
                 isChecked = option.enabled
                 setOnCheckedChangeListener { _, checked -> onEnabledChanged(checked) }
@@ -284,11 +286,10 @@ class MainActivity : Activity() {
 
     private fun smallActionButton(labelRes: Int, onClick: () -> Unit): Button = Button(this).apply {
         setText(labelRes)
-        setTextColor(getColor(R.color.paper))
+        setTextColor(AndroidCompat.color(this, R.color.paper))
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f)
-        background = getDrawable(R.drawable.bg_button_secondary)
+        AndroidCompat.setBackground(this, R.drawable.bg_button_secondary)
         minWidth = 0
-        minimumWidth = 0
         setPadding(dp(10), 0, dp(10), 0)
         setOnClickListener { onClick() }
     }
@@ -365,19 +366,32 @@ class MainActivity : Activity() {
     }
 
     private fun openAlertSettings() {
-        val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
-            putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
-            putExtra(Settings.EXTRA_CHANNEL_ID, NotificationHelper.CHANNEL_ID)
+        val intent = when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> Intent(
+                Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS
+            ).apply {
+                putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                putExtra(Settings.EXTRA_CHANNEL_ID, NotificationHelper.CHANNEL_ID)
+            }
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> Intent(
+                Settings.ACTION_APP_NOTIFICATION_SETTINGS
+            ).putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+            else -> Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", packageName, null)
+            )
         }
         startActivity(intent)
     }
 
     private fun needsNotificationPermission(): Boolean =
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+            NotificationPermissionCompat.needsPermission(this)
 
     private fun requestNotificationsPermission() {
-        requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATIONS)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            NotificationPermissionCompat.request(this, REQUEST_NOTIFICATIONS)
+        }
     }
 
     @Deprecated("Deprecated in Java")
