@@ -1,0 +1,73 @@
+name: Release Android APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag to create (for example, v1.0.0)
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  quality:
+    name: Quality checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+      - name: Verify product quality rules
+        run: python3 scripts/quality_checks.py
+
+  release:
+    name: Build and publish APK
+    needs: quality
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v5
+      - name: Set up JDK 17
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android build tools
+        shell: bash
+        run: |
+          SDKMANAGER="${ANDROID_HOME}/cmdline-tools/latest/bin/sdkmanager"
+          if [ ! -x "$SDKMANAGER" ]; then SDKMANAGER="$(command -v sdkmanager)"; fi
+          yes | "$SDKMANAGER" --licenses || true
+          "$SDKMANAGER" 'platforms;android-35' 'build-tools;35.0.0'
+      - name: Build installable debug APK
+        shell: bash
+        run: |
+          set -o pipefail
+          ./gradlew --no-daemon :app:assembleDebug --stacktrace 2>&1 | tee gradle-build.log
+      - name: Upload Gradle build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: negativity-now-gradle-build-log
+          path: gradle-build.log
+          if-no-files-found: ignore
+      - name: Verify debug APK signature
+        run: |
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose app/build/outputs/apk/debug/app-debug.apk
+      - name: Name release APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk "negativity-now-${RELEASE_TAG}.apk"
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$RELEASE_TAG" \
+            "negativity-now-${RELEASE_TAG}.apk" \
+            --target "$GITHUB_SHA" \
+            --title "Negativity Now $RELEASE_TAG" \
+            --generate-notes
