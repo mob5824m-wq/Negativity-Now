@@ -189,7 +189,7 @@ class MainActivity : Activity() {
                 row.addView(CheckBox(this).apply {
                     text = getString(DAY_SHORT_LABEL_RESOURCES[day - 1])
                     isAllCaps = false
-                    setTextColor(AndroidCompat.color(this, R.color.paper))
+                    setTextColor(AndroidCompat.color(this@MainActivity, R.color.paper))
                     textSize = 13f
                     contentDescription = getString(
                         R.string.day_enabled_description,
@@ -255,7 +255,7 @@ class MainActivity : Activity() {
 
         addView(TextView(this@MainActivity).apply {
             text = option.text
-            setTextColor(AndroidCompat.color(this, R.color.paper))
+            setTextColor(AndroidCompat.color(this@MainActivity, R.color.paper))
             setTextSize(TypedValue.COMPLEX_UNIT_SP, 15f)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 TextLayoutCompat.setLineSpacing(this, dp(2).toFloat())
@@ -269,7 +269,7 @@ class MainActivity : Activity() {
 
             addView(Switch(this@MainActivity).apply {
                 text = getString(R.string.enabled)
-                setTextColor(AndroidCompat.color(this, R.color.muted))
+                setTextColor(AndroidCompat.color(this@MainActivity, R.color.muted))
                 contentDescription = getString(R.string.comment_enabled_description, option.text)
                 isChecked = option.enabled
                 setOnCheckedChangeListener { _, checked -> onEnabledChanged(checked) }
@@ -286,7 +286,7 @@ class MainActivity : Activity() {
 
     private fun smallActionButton(labelRes: Int, onClick: () -> Unit): Button = Button(this).apply {
         setText(labelRes)
-        setTextColor(AndroidCompat.color(this, R.color.paper))
+        setTextColor(AndroidCompat.color(this@MainActivity, R.color.paper))
         setTextSize(TypedValue.COMPLEX_UNIT_SP, 11f)
         AndroidCompat.setBackground(this, R.drawable.bg_button_secondary)
         minWidth = 0
