@@ -48,7 +48,7 @@ jobs:
           status=${PIPESTATUS[0]}
           set -e
           if [ "$status" -ne 0 ]; then
-            diagnostics=$(grep -inE 'what went wrong|^> |error|exception|resource|failed' gradle-build.log | head -n 35 | tr '\n' ' ' | sed 's/%/%25/g')
+            diagnostics=$(grep -inE '^e:|\.kt:[0-9]+|unresolved reference|type mismatch|what went wrong|^> |error|exception|resource|failed' gradle-build.log | head -n 45 | tr '\n' ' ' | sed 's/%/%25/g')
             echo "::error title=APK build failed::$diagnostics"
             exit "$status"
           fi
